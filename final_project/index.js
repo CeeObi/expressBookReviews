@@ -20,13 +20,13 @@ if (req.session.authorization){
             next()
         }
         else{
-            return res.status(404).json({messae:"User not authenticated"})
+            return res.status(404).json({message:"User not authenticated"})
         }
         
     })
 }
 else{
-    return res.status(404).json({messae:"User not loged in"})
+    return res.status(404).json({message:"User not logged in"})
 }
 });
  

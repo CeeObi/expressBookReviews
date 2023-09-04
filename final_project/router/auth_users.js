@@ -7,16 +7,19 @@ let users = [];
 
 const isValid = (username)=>{ //returns boolean
 //write code to check is the username is valid
+let isUserValid = users.filter((user)=>{return user.username===username})
+if (isUserValid){
+    return true
+}
+else {
+    return false
+}
 }
 
 const authenticatedUser = (username,password)=>{ //returns boolean
 //write code to check if username and password match the one we have in records.
-console.log(users)
-console.log(username)
-console.log(password)
 for (let i=0; i<=users.length; i++){
-    if (users[i].username===username&&users[i].password===password){
-        console.log("yes")
+    if (users[i].username===username&&users[i].password===password){        
         return true
     }
     else{
@@ -42,8 +45,19 @@ regd_users.post("/login", (req,res) => {
 
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
-  //Write your code here
+     //Write your code here
+  let isbn = req.query.review;    //?review=1
+  let review =req.body.review
+    let book = books[isbn];
+    console.log(req.user)
+    console.log(book)
+    console.log(review)
+    //Stoppped here in Task 8.
+    
+
   
+
+
   return res.status(300).json({message: "Yet to be implemented"});
 });
 
