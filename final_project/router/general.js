@@ -8,20 +8,19 @@ const public_users = express.Router();
 public_users.post("/register", (req,res) => {
   //Write your code here
   username= req.body.username
-  password= req.body.password  
-  console.log(username)
-  console.log(password)
-  if (username.length<1 || password.length<1){
-    res.send({Error: "Please provide username or password!"})}
-    //this last part above just worked out
-    
-  else{
-    for (let i=1; i<=users.length; i++){
-        if (users[i]["username"]===username){
-            res.send({Error: "Username already exixts"})}
+  password= req.body.password    
+    if (username && password){         
+      for (let i=0; i<users.length; i++){        
+            if (users[i].username===username){
+                return res.status(404).json({Error: "Username already exixts"});
+            }
         }
+      users.push({username:username,password:password})
+      return res.status(200).json("New username have been successfully registered")
+      } 
+     else{
+        return res.status(404).json({Error: "Please provide username or password!"})
     }
-    users.push({username:username,password:password})  
 });
 
 // Get the book list available in the shop
