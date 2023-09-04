@@ -11,6 +11,14 @@ const isValid = (username)=>{ //returns boolean
 
 const authenticatedUser = (username,password)=>{ //returns boolean
 //write code to check if username and password match the one we have in records.
+for (let i=1; i<=users.length; i++){
+    if (users[i]["username"]===username&&user[i]["password"]===password){
+        return true
+    }
+    else{
+        return false
+    }
+}
 }
 
 //only registered users can login
