@@ -26,40 +26,59 @@ public_users.post("/register", (req,res) => {
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
   //Write your code here
-  res.send(JSON.stringify(books));  
+  const promise = new Promise((resolve,reject)=>{      
+      setTimeout(() => {
+        resolve(JSON.stringify(books))
+      }, 3000);       
+    })
+    promise.then((successMessage)=>{res.send(successMessage)})   
 });
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
     //Write your code here
-  let isbn = req.params.isbn;
-    let book = books[isbn];
-    res.send(JSON.stringify(book));
+    const promise = new Promise((resolve,reject)=>{
+    let isbn = req.params.isbn;
+    let book = books[isbn];    
+    setTimeout(()=>{resolve(JSON.stringify(book));},6000 )    
+})
+promise.then((successMessage)=>{res.send(successMessage)}
+)
  });
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
-  //Write your code here
-  let author = JSON.stringify(req.params.author);  
-    //STILL TRYING TO SORT HERE OUT, TASK 3  
-    let found_book = []
-    Object.entries(books).forEach(([key,value]) => {
-        let authr =JSON.stringify(value['author'])            
-        if (author === authr){
-            found_book.push(books[key])            
-        }         
-    })
-    if (found_book.length > 0){
-            console.log("Yes")
-            res.send(JSON.stringify(found_book))}
-    else{
-    res.send({Error: "Book author is unavaiable"})}    
- 
+  //Write your code here 
+  let promise=new Promise((resolve,reject)=>
+  {    
+        let author = JSON.stringify(req.params.author);      
+            let found_book = []
+            Object.entries(books).forEach(([key,value]) => {
+                let authr =JSON.stringify(value['author'])            
+                if (author === authr){
+                    found_book.push(books[key])            
+                }         
+            })
+        
+        setTimeout(()=>
+        {
+                if (found_book.length > 0){                
+                        resolve(JSON.stringify(found_book))
+                }
+                else{
+                reject({Error: "Book author is unavaiable"})
+                }
+        },3000)    
+   }
+) 
+
+promise.then((successMessage)=>{res.send(successMessage)},(failedMessage)=>{res.send(failedMessage)})
 });
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
    //Write your code here
+let promise=new Promise((resolve,reject)=>{
    let title = JSON.stringify(req.params.title);     
    let found_book = []
    Object.entries(books).forEach(([key,value]) => {
@@ -68,12 +87,17 @@ public_users.get('/title/:title',function (req, res) {
         found_book.push(books[key])            
        }         
    })
-   if (found_book.length > 0){
-           console.log("Yes")
-           res.send(JSON.stringify(found_book))}
-   else{
-   res.send({Error: "Book title is unavaiable"})}    
-
+   setTimeout(()=>
+    {
+        if (found_book.length > 0){                
+                resolve(JSON.stringify(found_book))
+        }
+        else{
+            reject({Error: "Book title is unavaiable"})
+        }    
+    },3000)
+})
+promise.then((successMessage)=>{res.send(successMessage)},(failedMessage)=>{res.send(failedMessage)})
 });
 
 //  Get book review
