@@ -35,7 +35,7 @@ regd_users.post("/login", (req,res) => {
   let password= req.body.password  
   const authUser =  authenticatedUser(username,password)
   if (authUser){
-      let accessToken=jwt.sign({password:password,username:username},"access",{expiresIn:15})
+      let accessToken=jwt.sign({password:password,username:username},"access",{expiresIn:60*60})
       req.session.authorization={accessToken,username}
       console.log(req.session.authorization)
       return res.status(200).json("User have successfully logged in")
@@ -56,6 +56,19 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
     console.log(book)
   return res.status(200).json(book);
 });
+
+// Delete a book review
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+    //Write your code here
+ let isbn = req.params.isbn;   
+ //let review =req.query.review
+   let book = books[isbn];    
+   let username = req.user.username                     
+   delete book.reviews[username]
+   console.log(book)
+ return res.status(200).json(book);
+});//Completed Task 9. Starting task 10.
+
 
 module.exports.authenticated = regd_users;
 module.exports.isValid = isValid;
