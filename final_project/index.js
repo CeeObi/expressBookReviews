@@ -17,6 +17,7 @@ if (req.session.authorization){
     jwt.verify(token,"access",(err,user)=>{
         if (!err){
             req.user=user
+            
             next()
         }
         else{

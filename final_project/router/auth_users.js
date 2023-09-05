@@ -18,14 +18,14 @@ else {
 
 const authenticatedUser = (username,password)=>{ //returns boolean
 //write code to check if username and password match the one we have in records.
+if (users.length>0){
 for (let i=0; i<=users.length; i++){
     if (users[i].username===username&&users[i].password===password){        
         return true
-    }
-    else{
-        return false
-    }
+    }   
 }
+}
+return false
 }
 
 //only registered users can login
@@ -35,8 +35,9 @@ regd_users.post("/login", (req,res) => {
   let password= req.body.password  
   const authUser =  authenticatedUser(username,password)
   if (authUser){
-      let accessToken=jwt.sign({data:password},"access",{expiresIn:60*60})
+      let accessToken=jwt.sign({password:password,username:username},"access",{expiresIn:15})
       req.session.authorization={accessToken,username}
+      console.log(req.session.authorization)
       return res.status(200).json("User have successfully logged in")
   }
   else
@@ -46,19 +47,14 @@ regd_users.post("/login", (req,res) => {
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
      //Write your code here
-  let isbn = req.query.review;    //?review=1
-  let review =req.body.review
-    let book = books[isbn];
-    console.log(req.user)
+  let isbn = req.params.isbn;   
+  let review =req.query.review  //auth/review/1?review=Great
+    let book = books[isbn];    
+    let username = req.user.username //auth/review/1?review=Great&&username=John
+                    //req.user.username;   req.query.username   
+    book.reviews[username]=review
     console.log(book)
-    console.log(review)
-    //Stoppped here in Task 8.
-    
-
-  
-
-
-  return res.status(300).json({message: "Yet to be implemented"});
+  return res.status(200).json(book);
 });
 
 module.exports.authenticated = regd_users;
